@@ -5,3 +5,7 @@
 body{
     font-family: 'Roboto Condensed', sans-serif;
 }
+
+.spinner-border{
+    animation: 1s linear infinite spinner-border;
+}

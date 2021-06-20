@@ -1,4 +1,5 @@
 const $divTabla = $("#divTabla")
+
 const traerDatos = async (url) =>{
     let response = await fetch(url)
     let {data} = await response.json() 
@@ -155,8 +156,8 @@ const traducirNombrePais = async (paisEnIngles) =>{
 
 const iniciarSesion = async (e) => {
 	e.preventDefault();
-	let email = $("#email").val()
-	let password = $("#password").val()
+	const email = $("#email").val()
+	const password = $("#password").val()
 	
 	let response = await fetch("/api/login",{
 		method: "POST",
@@ -166,6 +167,8 @@ const iniciarSesion = async (e) => {
 	let token = data.token
 	if (token){
 		localStorage.setItem("token", token)
+		$(".toast-body").html(`Sesión iniciada como ${email}`)
+		$('.toast').toast()
 		$("#modalLogin").modal("hide")
 		$("form")[0].reset() //esto deberia aplicar reset a un elemento html javascript
 		iniciarApp()
@@ -181,6 +184,8 @@ const iniciarApp = () => { //ejecutar una vez validado el usuario
 	$("#liIniciarSesion").toggleClass("d-none")
 	$("#liCerrarSesion").toggleClass("d-none")
 	$("#liSituacionChile").toggleClass("d-none")
+
+	
 }
 
 const cerrarSesion = () => {
@@ -254,6 +259,9 @@ const mostrarSituacionChile = async () => {
 			  }
 			}
 		});
+	})
+	.finally(()=>{
+		$(".spinner-border").toggleClass("d-none")
 	});
 }
 

@@ -38,11 +38,32 @@
     </div>
 </nav>
 
+<!-- toast iniciar sesion -->
+<div aria-live="polite" aria-atomic="true" style="position: relative; min-height: 0px;">
+  <div id="toastNotificacion" class="toast" style="position: absolute; top: 0px; right: 0px;" data-delay="3000">
+    <div class="toast-header">
+      <strong class="mr-auto">COVID-19</strong>
+      <small>Notificación</small>
+      <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="toast-body">
+      
+    </div>
+  </div>
+</div>
+
 <div id="divGraficoPaises" class="container">
     <canvas id="graficoPaises" width="800" height="450"></canvas>
 </div>
 
 <div id="divGraficoChile" class="container d-none">
+  <div class="d-flex justify-content-center">
+    <div class="spinner-border m-5" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
   <canvas id="graficoChile" width="800" height="450"></canvas>
 </div>
 
@@ -108,6 +129,8 @@
       </div>
     </div>
   </div>
+
+
 
 <script
   src="https://code.jquery.com/jquery-3.6.0.min.js"
