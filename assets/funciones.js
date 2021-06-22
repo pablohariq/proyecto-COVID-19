@@ -1,13 +1,11 @@
-const $divTabla = $("#divTabla")
-
-const traerDatos = async (url) =>{
+export const traerDatos = async (url) =>{
     let response = await fetch(url)
     let {data} = await response.json() 
     // console.log(data)
     return data //data es un arreglo
 }
 
-const traerDatosPrivados = async (url,jwt) =>{
+export const traerDatosPrivados = async (url,jwt) =>{
     let response = await fetch(url,{
 		method: "GET",
 		headers:{
@@ -20,7 +18,7 @@ const traerDatosPrivados = async (url,jwt) =>{
     return data //data es un arreglo
 }
 
-const identificarMasCasosActivos = (datosTotales) => { //identificar los 25 paises con mas casos activos
+export const identificarMasCasosActivos = (datosTotales) => { //identificar los 20 paises con mas casos activos
 	datosFiltrados = datosTotales.filter(pais => pais.active > 10000) 
 	datosFiltrados.sort((pais1, pais2) => pais2.active - pais1.active)
 	topCasosActivos = datosFiltrados.slice(0,20) //top 20
@@ -28,14 +26,14 @@ const identificarMasCasosActivos = (datosTotales) => { //identificar los 25 pais
 	return topCasosActivos
 }
 
-let canvasGraficoPaises
-const crearGraficoPaises = (arreglo) =>{
+export const crearGraficoPaises = (arreglo) =>{
     // console.log(arreglo)
     let paises = arreglo.map((d) => d.location) //d de data
     let arregloConfirmados = arreglo.map(d => d.confirmed)
     let arregloMuertes = arreglo.map(d => d.deaths)
     let arregloRecuperados = arreglo.map(d => d.recovered)
     let arregloCasosActivos = arreglo.map(d => d.active)
+
 
     let canvasGraficoPaises = new Chart(document.getElementById("graficoPaises"), {
         type: 'bar',
@@ -76,9 +74,7 @@ const crearGraficoPaises = (arreglo) =>{
     });
 }
 
-
-cuerpoTabla = document.querySelector("#divTabla tbody")
-const crearTabla = (arreglo) =>{
+export const crearTabla = (arreglo) =>{
 	arreglo.forEach((elemento) =>{
 		//formatear los numeros con separados de miles
 		const {location: ubicacion, confirmed: confirmados, deaths: muertes, recovered: recuperados, active: activos} = elemento
@@ -91,8 +87,7 @@ const crearTabla = (arreglo) =>{
 	$divTabla.removeClass("d-none")
 }
 
-let graficoDetallePais 
-const verDetalle = async function(){
+export const verDetalle = async function(){
 	if(graficoDetallePais) graficoDetallePais.destroy(); //destruir canvas previo si existe
 	let pais = $(this).attr("data-pais")
 	let paisTraducido = await traducirNombrePais(pais)
@@ -132,8 +127,8 @@ const verDetalle = async function(){
 	});
 }
 
-// recibe el nombre de un país en inglés y devuelve su traducción en español mediante otra API
-const traducirNombrePais = async (paisEnIngles) =>{
+//recibe el nombre de un país en inglés y devuelve su traducción en español mediante otra API
+export const traducirNombrePais = async (paisEnIngles) =>{
 	let response = await fetch(`https://restcountries.eu/rest/v2/name/${paisEnIngles}`)
 	let [data] = await response.json()
 	let traduccion = data.translations.es
@@ -143,8 +138,7 @@ const traducirNombrePais = async (paisEnIngles) =>{
 //pero al menos en la traducción de la ventana modal se ve bien. Se podría agregar una ruedita de cargando quizás
 
 //HITO 2
-
-const iniciarSesion = async (e) => {
+export const iniciarSesion = async (e) => {
 	e.preventDefault();
 	const email = $("#email").val()
 	const password = $("#password").val()
@@ -169,15 +163,13 @@ const iniciarSesion = async (e) => {
 	}
 }
 
-const iniciarApp = () => { //ejecutar una vez validado el usuario
+export const iniciarApp = () => { //ejecutar una vez validado el usuario
 	$("#liIniciarSesion").toggleClass("d-none")
 	$("#liCerrarSesion").toggleClass("d-none")
-	$("#liSituacionChile").toggleClass("d-none")
-
-	
+	$("#liSituacionChile").toggleClass("d-none")	
 }
 
-const cerrarSesion = () => {
+export const cerrarSesion = () => {
 	localStorage.removeItem("token")
 	$("#liIniciarSesion").toggleClass("d-none")
 	$("#liSituacionChile").toggleClass("d-none")
@@ -189,8 +181,7 @@ const cerrarSesion = () => {
 	if (canvasGraficoPaises) canvasGraficoPaises.destroy()
 }
 
-let canvasGraficoChile
-const mostrarSituacionChile = async () => {
+export const mostrarSituacionChile = async () => {
 	$("#divGraficoChile").removeClass("d-none")
 	if (canvasGraficoChile) {canvasGraficoChile.destroy()};
 	$("#divTabla").addClass("d-none")
@@ -255,23 +246,3 @@ const mostrarSituacionChile = async () => {
 		$(".spinner-border").addClass("d-none")
 	});
 }
-
-
-(async ()=>{
-    let datosTotales = await traerDatos('/api/total')
-    datosTotales.sort((pais1, pais2) => pais2.active - pais1.active)
-    // console.log(datosTotales)
-    let top25CasosActivos = identificarMasCasosActivos(datosTotales)
-    crearGraficoPaises(top25CasosActivos)
-
-    crearTabla(datosTotales)
-    $("table").hide();
-    $("table").fadeIn(500);
-    //cuando esté la tabla dibujada, se agrega el evento a todos los botones
-    $("td button").click(verDetalle)
-
-})();
-
-$("form").submit(iniciarSesion)
-$("#liSituacionChile a").click(mostrarSituacionChile)
-$("#liCerrarSesion a").click(cerrarSesion)
