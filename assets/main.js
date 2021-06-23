@@ -29,7 +29,6 @@ const identificarMasCasosActivos = (datosTotales) => { //identificar los 25 pais
 
 let canvasGraficoPaises
 const crearGraficoPaises = (arreglo) =>{
-    // console.log(arreglo)
     let paises = arreglo.map((d) => d.location) //d de data
     let arregloConfirmados = arreglo.map(d => d.confirmed)
     let arregloMuertes = arreglo.map(d => d.deaths)
