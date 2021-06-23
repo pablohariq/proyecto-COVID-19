@@ -36,7 +36,7 @@ const crearGraficoPaises = (arreglo) =>{
     let arregloRecuperados = arreglo.map(d => d.recovered)
     let arregloCasosActivos = arreglo.map(d => d.active)
 
-    let canvasGraficoPaises = new Chart(document.getElementById("graficoPaises"), {
+   	canvasGraficoPaises = new Chart(document.getElementById("graficoPaises"), {
         type: 'bar',
         data: {
           labels: paises,
