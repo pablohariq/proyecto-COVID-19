@@ -22,7 +22,6 @@ const traerDatosPrivados = async (url,jwt) =>{
 
 const identificarMasCasosActivos = (datosTotales) => { //identificar los 25 paises con mas casos activos
 	datosFiltrados = datosTotales.filter(pais => pais.active > 10000) 
-	datosFiltrados.sort((pais1, pais2) => pais2.active - pais1.active)
 	topCasosActivos = datosFiltrados.slice(0,20) //top 20
 	// console.log(topCasosActivos)
 	return topCasosActivos
@@ -190,7 +189,7 @@ const cerrarSesion = () => {
 }
 
 let canvasGraficoChile
-const mostrarSituacionChile = async () => {
+const mostrarSituacionChile = () => {
 	$("#divGraficoChile").removeClass("d-none")
 	if (canvasGraficoChile) {canvasGraficoChile.destroy()};
 	$("#divTabla").addClass("d-none")
@@ -261,8 +260,8 @@ const mostrarSituacionChile = async () => {
     let datosTotales = await traerDatos('/api/total')
     datosTotales.sort((pais1, pais2) => pais2.active - pais1.active)
     // console.log(datosTotales)
-    let top25CasosActivos = identificarMasCasosActivos(datosTotales)
-    crearGraficoPaises(top25CasosActivos)
+    let top20CasosActivos = identificarMasCasosActivos(datosTotales)
+    crearGraficoPaises(top20CasosActivos)
 
     crearTabla(datosTotales)
     $("table").hide();
